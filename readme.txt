@@ -1,4 +1,5 @@
 ICCV AIM 2019 Extreme Super-Resolution Challenge - Track 1: Fidelity
+# http://www.vision.ee.ethz.ch/aim19/
 
 #南京航空航天大学自动化学院404实验室 & 中国电子科技网络信息安全有限公司
 
@@ -6,7 +7,7 @@ ICCV AIM 2019 Extreme Super-Resolution Challenge - Track 1: Fidelity
 #参考 EDSR WDSR RDN AWSRN ESPCN
 #非常感谢上述作者的开源，引用本文请引用他们.
 #论文地址：https://arxiv.xilesou.top/abs/1912.08002
-
+#模型地址: 12月30号应该能上传...
 
 测试方法：
 cd ../../src
