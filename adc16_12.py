@@ -23,10 +23,7 @@ class Scale(nn.Module):
         else :
            return input * self.scale.cuda()
 
-
-
-
-class WDU(nn.Module):
+class WDU(nn.Module): #CONV UNIT
     def __init__(
         self, n_feats, kernel_size, block_feats, wn,  act=nn.ReLU(True),weight_init=1):
         super(WDU, self).__init__()
@@ -38,7 +35,6 @@ class WDU(nn.Module):
             wn(nn.Conv2d(block_feats, n_feats, kernel_size, padding=kernel_size//2)))
 
         self.body = nn.Sequential(*body)
-        # common.initialize_weights(body, 0.1)
 
     def forward(self, x):
         wdu = self.body(x)
@@ -46,9 +42,9 @@ class WDU(nn.Module):
         return wdu
 
 
-class WDB_B(nn.Module):
+class WDB_B(nn.Module): #ADRB
     def __init__(
-        self, n_feats, kernel_size, block_feats, wn, alpha=0.1,beta=1.0, act=nn.ReLU(True), weight_init=1):
+        self, n_feats, kernel_size, block_feats, wn, alpha=1.0,beta=1.0, act=nn.ReLU(True), weight_init=1):
         super(WDB_B, self).__init__()
         a01,a12,a23,a34 = alpha,alpha,alpha,alpha
         b01,b02,b03,b04 = beta,beta,beta,beta
@@ -81,8 +77,6 @@ class WDB_B(nn.Module):
         self.get_Y4=WDU(n_feats,kernel_size,block_feats,wn,act=act,weight_init=weight_init)
         self.LFF_B = nn.Conv2d(5*n_feats, n_feats, 1, padding=0, stride=1)
 
-        # common.initialize_weights([self.LFF], weight_init) #0.1 nom
-
     def forward(self, x):
         Y1=self.get_Y1(x)
         X1=self.A01(Y1)+self.B01(x)
@@ -107,8 +101,8 @@ class WDB_B(nn.Module):
 
   
 
-class WDN_B(nn.Module):
-    def __init__(self, n_feats, kernel_size, block_feats, wn, alpha=0.1,beta=1.0, act=nn.ReLU(True),weight_init=1):
+class WDN_B(nn.Module): #ADRU
+    def __init__(self, n_feats, kernel_size, block_feats, wn, alpha=1.0,beta=1.0, act=nn.ReLU(True),weight_init=1):
         super(WDN_B, self).__init__()
 
         a01,a12,a23,a34 = alpha,alpha,alpha,alpha
@@ -142,7 +136,6 @@ class WDN_B(nn.Module):
         self.wdb3=WDB_B(n_feats, kernel_size, block_feats, wn, alpha, beta,act=act,weight_init=weight_init)
         self.wdb4=WDB_B(n_feats, kernel_size, block_feats, wn, alpha, beta,act=act,weight_init=weight_init)
         self.LFF = nn.Conv2d(5*n_feats, n_feats, 1, padding=0, stride=1)
-        # common.initialize_weights([self.LFF], weight_init) #0.1 nom
 
     def forward(self, x):
 
@@ -168,7 +161,7 @@ class WDN_B(nn.Module):
 
     
 
-class FFSC(nn.Module):
+class FFSC(nn.Module): #AFSL
     def __init__(
         self, args, scale, n_feats, kernel_size, wn, weight_init=1):
         super(FFSC, self).__init__()
@@ -227,35 +220,41 @@ class FFSC(nn.Module):
             
             return x
         else:
+            print('!!!!! scale=',self.scale)
             pass
 
 class ADC16_12(nn.Module):
     def __init__(self, args):
         super(ADC16_12, self).__init__()
         self.args = args
-        # n_feats, kernel_size, block_feats, wn, alpha=0.1,beta=1.0, act=nn.ReLU(True)
+            #src/option.py  add:
+            #parser.add_argument('--act', type=str, default='leakyrelu',
+            #           help='activation function')
+            #parser.add_argument('--alpha', type=float, default=1.0,
+            #           help='dirac residual alpha')
+            #parser.add_argument('--beta', type=float, default=1.0,
+            #           help='dirac residual beta')
         self.n_resblocks = n_resblocks = args.n_resblocks
         n_feats = args.n_feats
         block_feats = args.block_feats
         kernel_size = 3
         if args.act == 'relu' or 'RELU' or 'Relu':
             act = nn.ReLU(True)
-        elif args.act == 'leakyrelu' or 'Leakyrelu' or 'LeakyReLU' :
+        elif args.act == 'leakyrelu' or 'Leakyrelu' or 'LeakyReLU' : 
             act = nn.LeakyReLU(negative_slope=0.2, inplace=True)
-        weight_init = 0.1
+        weight_init = 1 # don't need
         
-        scale = args.scale[0] #2
+        scale = args.scale[0] #16
         conv=common.default_conv
 
         wn = lambda x: torch.nn.utils.weight_norm(x)
 
         self.rgb_mean = torch.autograd.Variable(torch.FloatTensor(
-            [args.r_mean, args.g_mean, args.b_mean])).view([1, 3, 1, 1])
+            [args.r_mean, args.g_mean, args.b_mean])).view([1, 3, 1, 1]) #like WDSR
 
         # Shallow feature extraction net
         m_head = [conv(args.n_colors, n_feats, kernel_size)]
-        # common.initialize_weights( m_head, weight_init)
-        # Redidual dense blocks and dense feature fusion
+
         self.WRDBs = nn.ModuleList()
         for _ in range(n_resblocks):
             self.WRDBs.append(
@@ -266,14 +265,10 @@ class ADC16_12(nn.Module):
             wn(nn.Conv2d(n_resblocks * n_feats, n_feats, 1, padding=0, stride=1),),
             wn(nn.Conv2d(n_feats, n_feats, kernel_size, padding=(kernel_size-1)//2, stride=1))
         ])
-        # common.initialize_weights( self.GFF, weight_init)
 
         # define tail module
 
-
-        # tail = FFSC(args, scale, n_feats, kernel_size, wn,weight_init=weight_init)
-
-        tail = FFSC(args, scale, n_feats, kernel_size, wn,weight_init=weight_init)
+        tail = FFSC(args, scale, n_feats, kernel_size, wn,weight_init=weight_init) #AFSL
 
         skip = []
         for _ in range(int(math.log(scale, 4))):
@@ -284,7 +279,6 @@ class ADC16_12(nn.Module):
 
         self.head = nn.Sequential(*m_head)
         self.tail = tail
-        # self.tail = nn.Sequential(*tail)
         self.skip = nn.Sequential(*skip)
 
         a01,a12,a23,a34 = args.alpha,args.alpha,args.alpha,args.alpha
