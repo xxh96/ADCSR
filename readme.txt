@@ -10,6 +10,8 @@ ICCV AIM 2019 Extreme Super-Resolution Challenge - Track 1: Fidelity
 #使用测试代码为ESRGAN提供并修改，感谢分享
 #若其他人测试与论文中出现值有较大出入（manga109我感觉挺高.不知道是不是数据集制作的问题.若有大佬验证请留言.）。请联系留言或邮箱：xxh96@outlook.com。
 #若有相差不大（小于0.02），可能是我Best和最终模型弄混了。
+#代码中使用WDSR的WN作为归一化层，论文中没提及，也懒得改了，望见谅。
+#再次感谢大佬们提供的代码。
 
 #模型地址: 百度云链接: https://pan.baidu.com/s/1eC3yzVvoDeVbVITctZOmxQ 提取码: yvqk
 
@@ -20,9 +22,9 @@ cd ../../src
             #parser.add_argument('--act', type=str, default='leakyrelu',
             #           help='activation function')
             #parser.add_argument('--alpha', type=float, default=1.0,
-            #           help='dirac residual alpha')
+            #           help='alpha')
             #parser.add_argument('--beta', type=float, default=1.0,
-            #           help='dirac residual beta')
+            #           help='beta')
             
 #[-]中为自己填写
 #测试前先创建文件夹，并放模型 ../experiment/DSADCSR/model/dsadcsr_x16.pt
