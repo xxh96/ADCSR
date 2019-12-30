@@ -44,7 +44,7 @@ class CONVU(nn.Module):
 
 class ADRB(nn.Module):
     def __init__(
-        self, n_feats, kernel_size, block_feats, wn, alpha=0.1,beta=1.0, act=nn.ReLU(True), weight_init=1):
+        self, n_feats, kernel_size, block_feats, wn, alpha=1.0,beta=1.0, act=nn.ReLU(True), weight_init=1):
         super(ADRB, self).__init__()
         a01,a12,a23,a34 = alpha,alpha,alpha,alpha
         b01,b02,b03,b04 = beta,beta,beta,beta
@@ -77,8 +77,6 @@ class ADRB(nn.Module):
         self.get_Y4=CONVU(n_feats,kernel_size,block_feats,wn,act=act,weight_init=weight_init)
         self.LFF_B = nn.Conv2d(5*n_feats, n_feats, 1, padding=0, stride=1)
 
-        # common.initialize_weights([self.LFF], weight_init) #0.1 nom
-
     def forward(self, x):
         Y1=self.get_Y1(x)
         X1=self.A01(Y1)+self.B01(x)
@@ -102,7 +100,7 @@ class ADRB(nn.Module):
         return self.LFF_B(Y5)+x
 
 class ADRU(nn.Module):
-    def __init__(self, n_feats, kernel_size, block_feats, wn, alpha=0.1,beta=1.0, act=nn.ReLU(True),weight_init=1):
+    def __init__(self, n_feats, kernel_size, block_feats, wn, alpha=1.0,beta=1.0, act=nn.ReLU(True),weight_init=1):
         super(ADRU, self).__init__()
 
         a01,a12,a23,a34 = alpha,alpha,alpha,alpha
@@ -136,7 +134,6 @@ class ADRU(nn.Module):
         self.wdb3=ADRB(n_feats, kernel_size, block_feats, wn, alpha, beta,act=act,weight_init=weight_init)
         self.wdb4=ADRB(n_feats, kernel_size, block_feats, wn, alpha, beta,act=act,weight_init=weight_init)
         self.LFF = nn.Conv2d(5*n_feats, n_feats, 1, padding=0, stride=1)
-        # common.initialize_weights([self.LFF], weight_init) #0.1 nom
 
     def forward(self, x):
 
@@ -161,7 +158,7 @@ class ADRU(nn.Module):
         return self.LFF(Y5)+x
     
 
-class AFSC(nn.Module):
+class AFSC(nn.Module): #AFSL
     def __init__(
         self, args, scale, n_feats, kernel_size, wn, weight_init=1):
         super(AFSC, self).__init__()
@@ -208,9 +205,9 @@ class ADCSR(nn.Module):
             act = nn.ReLU(True)
         elif args.act == 'leakyrelu' or 'Leakyrelu' or 'LeakyReLU' :
             act = nn.LeakyReLU(negative_slope=0.2, inplace=True)
-        weight_init = 0.1
+        weight_init = 1.0
         
-        scale = args.scale[0] #2
+        scale = args.scale[0] #2 3 4 8
         conv=common.default_conv
 
         wn = lambda x: torch.nn.utils.weight_norm(x)
@@ -218,10 +215,8 @@ class ADCSR(nn.Module):
         self.rgb_mean = torch.autograd.Variable(torch.FloatTensor(
             [args.r_mean, args.g_mean, args.b_mean])).view([1, 3, 1, 1])
 
-        # Shallow feature extraction net
         m_head = [conv(args.n_colors, n_feats, kernel_size)]
-        # common.initialize_weights( m_head, weight_init)
-        # Redidual dense blocks and dense feature fusion
+        
         self.ADRUs = nn.ModuleList()
         for _ in range(n_resblocks):
             self.ADRUs.append(
@@ -232,10 +227,6 @@ class ADCSR(nn.Module):
             wn(nn.Conv2d(n_resblocks * n_feats, n_feats, 1, padding=0, stride=1),),
             wn(nn.Conv2d(n_feats, n_feats, kernel_size, padding=(kernel_size-1)//2, stride=1))
         ])
-        # common.initialize_weights( self.GFF, weight_init)
-
-        # define tail module
-
 
         tail = AFSC(args, scale, n_feats, kernel_size, wn,weight_init=weight_init)
 
