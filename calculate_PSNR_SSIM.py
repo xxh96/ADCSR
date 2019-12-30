@@ -35,8 +35,7 @@ def main(args=[]):
 
         print('test:',args)
     else:
-        model = ['WRPN_BBB'] # WRPN_BBB 
-        #'B100','Urban100','manga109','DIV2K']
+        model = [''] # save dir 
         scale = 2
         test_Y = True  # True: test Y channel only; False: test RGB channels
     crop_border = scale
