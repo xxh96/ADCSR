@@ -7,7 +7,9 @@ ICCV AIM 2019 Extreme Super-Resolution Challenge - Track 1: Fidelity
 #参考 EDSR WDSR RDN AWSRN ESPCN
 #非常感谢上述作者的开源，引用本文请引用他们.
 #论文地址：https://arxiv.xilesou.top/abs/1912.08002
-#模型地址: 12月30号应该能上传...
+#模型地址: 链接: https://pan.baidu.com/s/1eC3yzVvoDeVbVITctZOmxQ 提取码: yvqk
+
+
 
 测试方法：
 cd ../../src
