@@ -227,13 +227,6 @@ class ADC16_12(nn.Module):
     def __init__(self, args):
         super(ADC16_12, self).__init__()
         self.args = args
-            #src/option.py  add:
-            #parser.add_argument('--act', type=str, default='leakyrelu',
-            #           help='activation function')
-            #parser.add_argument('--alpha', type=float, default=1.0,
-            #           help='dirac residual alpha')
-            #parser.add_argument('--beta', type=float, default=1.0,
-            #           help='dirac residual beta')
         self.n_resblocks = n_resblocks = args.n_resblocks
         n_feats = args.n_feats
         block_feats = args.block_feats
