@@ -41,7 +41,7 @@ def main(args=[]):
         test_Y = True  # True: test Y channel only; False: test RGB channels
     crop_border = scale
     gt_basedir = '../../dataset/benchmark/'
-    sr_basedir = '../../404/experiment/'
+    sr_basedir = '../experiment/'
     crop_border = scale
 
     # suffix = '_x2_SR'  # suffix for Gen images
