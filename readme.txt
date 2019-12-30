@@ -32,8 +32,8 @@ cd ../../src
 #DSADCSR_X8 代码被删除了..待修改
 
 
-#DSADCSR16 挑战赛模型
-python main.py --model ADC16_12 --data_test Demo --n_resblock 4 --n_feats 128 --block_feat 384 --save DSADCSR --dir_data [/dataset/]  --scale 16  --pre_train ../experiment/DSADCSR/model/dsadcsr_x16.pt --test_only --save_result --prec half --self_ens
+#DSADCSR 16为挑战赛模型
+python main.py --model DSADCSR --data_test [Demo+Set5] --n_resblock 4 --n_feats 128 --block_feat 384 --save [DSADCSR] --dir_data [/dataset/]  --scale [8 16]  --pre_train ../experiment/[DSADCSR]/model/[dsadcsr_x16.pt] --test_only --save_result --prec half --self_ens
 
 #ADCSR (ADCSRS --n_feats 64 --block_feat 192)
 python main.py --model ADCSR --data_test [Demo+Set5+Set4+...] --n_resblock 4 --n_feats 128 --block_feat 384  --save [ADCSR_X2X3X4X8] --dir_data [/dataset/]  --scale [2 3 4 8]  --pre_train ../experiment/[--save]/model/[model_name] --test_only --save_result --prec half --self_ens
