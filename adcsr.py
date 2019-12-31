@@ -7,9 +7,6 @@ from model import common
 def make_model(args, parent=False):
     return ADCSR(args)
 
-def abandon():
-    return ['tail']
-
 class Scale(nn.Module):
 
     def __init__(self,init_value=1e-3,requires_grad=True):
