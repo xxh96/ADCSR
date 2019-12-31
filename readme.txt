@@ -14,19 +14,28 @@ ICCV AIM 2019 Extreme Super-Resolution Challenge - Track 1: Fidelity
 #若有相差不大（小于0.02），可能是我Best和最终模型弄混了。
 #代码中使用WDSR的WN作为归一化层，论文中没提及，也懒得改了，望见谅。
 #再次感谢大佬们提供的代码。
-#（更新dsadcsrx8）
 #模型地址: 百度云链接: 链接: https://pan.baidu.com/s/1_TY-dR_J7RrsZNfVtPQHJA 提取码: b7in
 
 测试方法：
 cd ../../src
 
+#src/option.py  set:
+parser.add_argument('--act', type=str, default='leakyrelu',
+           help='activation function') 
+           
 #src/option.py  add:
-#parser.add_argument('--act', type=str, default='leakyrelu',
-#           help='activation function')
-#parser.add_argument('--alpha', type=float, default=1.0,
-#           help='alpha')
-#parser.add_argument('--beta', type=float, default=1.0,
-#           help='beta')
+parser.add_argument('--alpha', type=float, default=1.0,
+           help='alpha')
+parser.add_argument('--beta', type=float, default=1.0,
+           help='beta')
+parser.add_argument('--block_feats', type=int, default=384,
+            help='number of block_feats feature maps')
+parser.add_argument('--r_mean', type=float, default=0.4488,
+                    help='Mean of R Channel')
+parser.add_argument('--g_mean', type=float, default=0.4371,
+                    help='Mean of G channel')
+parser.add_argument('--b_mean', type=float, default=0.4040,
+                    help='Mean of B channel')
             
 #[ ]中需决定自己填写内容，并删除'[]'.
 #测试前先创建文件夹，并放模型 ../experiment/DSADCSR/model/dsadcsr_x16.pt
