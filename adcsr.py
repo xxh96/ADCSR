@@ -198,9 +198,17 @@ class ADCSR(nn.Module):
         n_feats = args.n_feats
         block_feats = args.block_feats
         kernel_size = 3
-        if args.act == 'relu' or 'RELU' or 'Relu':
+        #if args.act == 'relu' or 'RELU' or 'Relu':
+        #    act = nn.ReLU(True)
+        #elif args.act == 'leakyrelu' or 'Leakyrelu' or 'LeakyReLU' :
+        #    act = nn.LeakyReLU(negative_slope=0.2, inplace=True)
+        #这里设置leakyrelu失败，就算args.act是 leakyrelu ，输出依然为 nn.ReLU(True)
+        #若按照下方设置 args.act 设置为 relu.
+        #adcsr提供模型参数的所有激活函数为relu
+        
+        if args.act in ['relu','RELU','Relu']:
             act = nn.ReLU(True)
-        elif args.act == 'leakyrelu' or 'Leakyrelu' or 'LeakyReLU' :
+        elif args.act in ['leakyrelu','Leakyrelu','LeakyReLU'] :
             act = nn.LeakyReLU(negative_slope=0.2, inplace=True)
         weight_init = 1.0
         
