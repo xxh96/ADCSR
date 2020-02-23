@@ -282,10 +282,17 @@ class DSADCSR(nn.Module):#ADC16_12
         n_feats = args.n_feats
         block_feats = args.block_feats
         kernel_size = 3
-        if args.act == 'relu' or 'RELU' or 'Relu':
+        #if args.act == 'relu' or 'RELU' or 'Relu':
+        #    act = nn.ReLU(True)
+        #elif args.act == 'leakyrelu' or 'Leakyrelu' or 'LeakyReLU' :
+        #    act = nn.LeakyReLU(negative_slope=0.2, inplace=True)
+        
+        if args.act in ['relu','RELU','Relu']:
             act = nn.ReLU(True)
-        elif args.act == 'leakyrelu' or 'Leakyrelu' or 'LeakyReLU' :
+        elif args.act in ['leakyrelu','Leakyrelu','LeakyReLU'] :
             act = nn.LeakyReLU(negative_slope=0.2, inplace=True)
+        print(act)
+        
         weight_init = 0.1
         
         scale = args.scale[0] #8,16
