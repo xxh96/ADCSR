@@ -20,7 +20,7 @@ ICCV AIM 2019 Extreme Super-Resolution Challenge - Track 1: Fidelity
 cd ../../src
 
 #src/option.py  set:
-parser.add_argument('--act', type=str, default='leakyrelu',
+parser.add_argument('--act', type=str, default='relu',
            help='activation function') 
            
 #src/option.py  add:
@@ -47,4 +47,15 @@ python main.py --model DSADCSR --data_test [Demo+Set5] --n_resblock 4 --n_feats 
 
 #ADCSR (ADCSRS --n_feats 64 --block_feat 192)
 python main.py --model ADCSR --data_test [Demo+Set5+Set4+...] --n_resblock 4 --n_feats 128 --block_feat 384  --save [ADCSR_X2X3X4X8] --dir_data [/dataset/]  --scale [2 3 4 8]  --pre_train ../experiment/[--save]/model/[model_name] --test_only --save_result --prec half --self_ens
+
+
+#2020年2月23日更新
+#修改了adcsr与dsadcsr的激活函数选择。
+#为我的代码错误，按照原始方法不能设置act为leakyrelu
+#因此使用修改后的代码需将act设置为relu，与论文中模型不符。若有机会我将会更正最终测试数据，但需要等待几个月。
+
+#论文中adcsr的基础测试集数据的激活函数为relu！！！
+#dsadcsr的第一级为relu，第二级由于是直接设置，激活函数为leakyrelu。
+#带来不便请谅解。
+
 
