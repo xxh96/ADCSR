@@ -6,7 +6,7 @@ ICCV AIM 2019 Extreme Super-Resolution Challenge - Track 1: Fidelity
 #训练/测试代码详见:EDSR https://github.com/thstkdgus35/EDSR-PyTorch
 #参考 EDSR WDSR RDN AWSRN ESPCN
 #非常感谢上述作者的开源，引用本文请引用他们.
-#论文地址：https://arxiv.xilesou.top/abs/1912.08002
+#论文地址：https://arxiv.org/abs/1912.08002
 #论文已被ICCVW2019接收,但由于延迟提交,在CVF中看不到.
 #使用测试代码为ESRGAN提供并修改，感谢分享
 #若其他人测试与论文中出现值有较大出入（我感觉manga109的测试结果挺高.不知道是不是LR数据集制作的问题.若有大佬验证请留言.）
