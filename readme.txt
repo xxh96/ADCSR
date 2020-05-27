@@ -1,4 +1,4 @@
-ICCV AIM 2019 Extreme Super-Resolution Challenge - Track 1: Fidelity
+ICCV AIM 2019 Extreme Super-Resolution Challenge - Track 1: Fidelity WINNER
 # http://www.vision.ee.ethz.ch/aim19/
 
 #南京航空航天大学自动化学院404实验室 & 中国电子科技网络信息安全有限公司
